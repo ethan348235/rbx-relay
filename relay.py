@@ -76,8 +76,8 @@ async def handle(ws):
 
 
 async def health_check(path, headers):
-    # render pings plain GET / for health; answer 200 so the service stays up
-    if path == "/":
+    # answer render's plain-GET health pings, never eat websocket upgrades
+    if path == "/" and headers.get("Upgrade", "").lower() != "websocket":
         return (200, [("Content-Type", "text/plain")], b"relay alive\n")
     return None
 
